@@ -9,7 +9,8 @@ router.get('/', function(req, res, next) {
 router.get('/xml/:testo/from/:from/to/:to', function(req, res, next){
   database.getConnection(function(err, connection){
     if(err) return res.send(err);
-    connection.query('SELECT * FROM scorporo_xml WHERE TX_RICHIESTA_XML LIKE "%' + req.params.testo + '%" AND TX_DATAINVIO >= ' + req.params.from + ' AND TX_DATAINVIO <= ' + req.params.to, function(err, rows, fields){
+    req.params.testo = '%' + req.params.testo + '%';
+    connection.query('SELECT * FROM scorporo_xml WHERE TX_RICHIESTA_XML LIKE ? AND TX_DATAINVIO >= ? AND TX_DATAINVIO <= ?', [req.params.testo, req.params.from, req.params.to], function(err, rows, fields){
       if(err) return res.json(err);
       connection.release()
       return res.json(rows);
