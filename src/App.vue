@@ -26,6 +26,10 @@
     <p>Nessun risultato da visualizzare, effettua una ricerca per consultare l'archivio XML.</p>
   </div>
 
+  <div class="searching" v-if="searching">
+    <p>Attendi, sto esplorando l'archivio XML.</p>
+  </div>
+
   <div class="result-view" v-if="results.length > 0">
     <div class="list">
       <h4>
@@ -106,6 +110,7 @@
   export default{
     data() {
       return {
+        searching: false,
         results: [],
         text: '',
         error: false,
@@ -137,12 +142,14 @@
           this.errorText = 'Devi specificare una data di fine.';
           return;
         }
-
+        this.searching = true;
         this.$http.get(`http://192.168.111.2:3000/xml/${this.text}/from/${this.start}/to/${this.end}`)
           .then((response) => {
             this.results = response.json();
+            this.searching = false;
           }, (response) => {
             this.results = response.json();
+            this.searching = false;
           });
       },
       getRequestCount(result) {
