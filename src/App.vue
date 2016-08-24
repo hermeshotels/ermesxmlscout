@@ -73,7 +73,7 @@
 
       <div class="request" v-if="selectedResult.TX_RISPOSTA_XML.length > 0">
         <div class="code-header">
-          Risposta 3
+          Risposta 1
         </div>
         <code class="prettyprint lang-xml">
           {{formatXml(selectedResult.TX_RISPOSTA_XML)}}
@@ -91,7 +91,7 @@
 
       <div class="request" v-if="selectedResult.TX_RISPOSTA3_XML.length > 0">
         <div class="code-header">
-          Risposta 3
+          Risposta 2
         </div>
         <code class="prettyprint lang-xml">
           {{formatXml(selectedResult.TX_RISPOSTA3_XML)}}
