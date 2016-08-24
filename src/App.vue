@@ -27,7 +27,7 @@
   </div>
 
   <div class="searching" v-if="searching">
-    <p>Lost in the XML... get out of hear may take a while.</p>
+    <p>Lost in the XML... getting out of hear may take a while.</p>
   </div>
 
   <div class="result-view" v-if="results.length > 0">
