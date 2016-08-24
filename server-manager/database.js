@@ -6,4 +6,4 @@ var pool  = mysql.createPool({
     database: 'hermes5',
 });
 
-module.exports = pull;
+module.exports = pool;
