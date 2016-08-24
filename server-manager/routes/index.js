@@ -1,13 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: '192.168.115.2',
-    user: 'hermes',
-    password: 'h3rm3s01!',
-    database: 'hermes5',
-});
-connection.connect();
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'ERMESXMLSCOUT - Internal Software' });
