@@ -22,12 +22,12 @@
     </div>
   </div>
 
-  <div class="no-result" v-if="results.length <= 0">
+  <div class="no-result" v-if="results.length <= 0 && searching === false">
     <p>Nessun risultato da visualizzare, effettua una ricerca per consultare l'archivio XML.</p>
   </div>
 
   <div class="searching" v-if="searching">
-    <p>Attendi, sto esplorando l'archivio XML.</p>
+    <p>Lost in the XML... get out of hear may take a while.</p>
   </div>
 
   <div class="result-view" v-if="results.length > 0">
@@ -305,7 +305,7 @@ a{
   }
 }
 
-.no-result{
+.no-result, .searching{
   width: 80%;
   margin: 0 auto;
   padding-top: 60px;
