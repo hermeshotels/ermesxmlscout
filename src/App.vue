@@ -16,6 +16,9 @@
       <input type="text" v-model="text" class="e-input" placeholder="rate id = 6354" />
       <datepicker :readonly="true" format="YYYYMMDD0000" :value.sync="start"></datepicker>
       <datepicker :readonly="true" format="YYYYMMDD2359" :value.sync="end"></datepicker>
+      <div style="margin-top: 30px;">
+        <input type="checkbox" v-model="reservation"> Sto ricercando una prenotazione
+      </div>
       <div class="start-search" v-on:click="getXml">
         RICERCA
       </div>
@@ -30,7 +33,42 @@
     <p>Lost in the XML... getting out of here may take a while.</p>
   </div>
 
-  <div class="result-view" v-if="results.length > 0">
+  <div class="result-view" v-if="reservation && results.length > 0">
+    <div class="list">
+      <h4>
+        <i class="material-icons">list</i> Lista dei risultati <br>
+        <small>seleziona una richiesta per visualizzare il dettaglio</small>
+      </h4>
+      <ul>
+        <li class="list-item" v-for="result in results" v-on:click="select(result)">
+          ID Richiesta: <strong>{{result.PR_ID}}</strong>
+        </li>
+      </ul>
+    </div>
+    <div class="inspect" v-if="selectedResult">
+
+      <div class="request" v-if="selectedResult.PR_RICHIESTA_XML.length > 0">
+        <div class="code-header">
+          Richiesta
+        </div>
+        <code class="prettyprint lang-xml">
+          {{formatXml(selectedResult.PR_RICHIESTA_XML)}}
+        </code>
+      </div>
+
+      <div class="request" v-if="selectedResult.PR_RISPOSTA_XML.length > 0">
+        <div class="code-header">
+          Risposta
+        </div>
+        <code class="prettyprint lang-xml">
+          {{formatXml(selectedResult.PR_RISPOSTA_XML)}}
+        </code>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="result-view" v-if="!reservation && results.length > 0">
     <div class="list">
       <h4>
         <i class="material-icons">list</i> Lista dei risultati <br>
@@ -112,6 +150,7 @@
       return {
         searching: false,
         results: [],
+        reservation: false,
         text: '',
         error: false,
         errorText: '',
@@ -143,14 +182,26 @@
           return;
         }
         this.searching = true;
-        this.$http.get(`http://192.168.111.2:3000/xml/${this.text}/from/${this.start}/to/${this.end}`)
-          .then((response) => {
-            this.results = response.json();
-            this.searching = false;
-          }, (response) => {
-            this.results = response.json();
-            this.searching = false;
-          });
+
+        if (this.reservation) {
+          this.$http.get(`http://localhost:3000/xml/reservation/${this.text}/from/${this.start}/to/${this.end}`)
+            .then((response) => {
+              this.results = response.json();
+              this.searching = false;
+            }, (response) => {
+              this.results = response.json();
+              this.searching = false;
+            });
+        } else {
+          this.$http.get(`http://192.168.111.2:3000/xml/${this.text}/from/${this.start}/to/${this.end}`)
+            .then((response) => {
+              this.results = response.json();
+              this.searching = false;
+            }, (response) => {
+              this.results = response.json();
+              this.searching = false;
+            });
+        }
       },
       getRequestCount(result) {
         let reqs = 0;

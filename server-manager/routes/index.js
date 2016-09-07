@@ -16,7 +16,22 @@ router.get('/xml/:testo/from/:from/to/:to', function(req, res, next){
       return res.json(rows);
     });
   })
-  
+});
+
+router.get('/xml/reservation/:rescode/from/:from/to/:to', function(req, res, next){
+  database.getConnection(function(err, connection){
+    if(err) return res.send(err);
+    connection.query('SELECT PR_ID from prenotazioni WHERE PR_CODE = ?', [req.params.rescode], function(err, rows, fields){
+      if(err) return res.json(err);
+      connection.query('SELECT * FROM prenotazioni_xml WHERE PR_ID = ?', [rows[0].PR_ID], function(err, reservation, fields){
+        if(err) return res.json(err);
+        return res.json(reservation);
+      });
+      connection.release();
+    });
+
+
+  })
 });
 
 module.exports = router;
